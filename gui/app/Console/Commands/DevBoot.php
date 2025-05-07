@@ -37,6 +37,12 @@ class DevBoot extends Command
         $serveProcess->start();
         $this->info('GUI process started...');
 
+        if (config('app.env') === 'local') {
+            $npmProcess = new Process(['npm', 'run', 'dev'], base_path());
+            $npmProcess->start();
+            $this->info('NPM process started...');
+        }
+
         $reverbProcess = new Process(['php', 'artisan', 'reverb:start'], base_path());
         $reverbProcess->start();
         $this->info('Laravel Reverb process started...');
