@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Services\FileWatcherService;
 
 class DevWatch extends Command
 {
@@ -11,7 +12,7 @@ class DevWatch extends Command
      *
      * @var string
      */
-    protected $signature = 'dev:watch';
+    protected $signature = 'dev:watch {directory}';
 
     /**
      * The console command description.
@@ -25,6 +26,8 @@ class DevWatch extends Command
      */
     public function handle(FileWatcherService $fileWatcherService)
     {
+        $directory = $this->argument('directory');
+
         $fileWatcherService->startWatching($directory, $this->output);
     }
 }
