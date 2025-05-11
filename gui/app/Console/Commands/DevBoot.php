@@ -47,6 +47,10 @@ class DevBoot extends Command
         $reverbProcess->start();
         $this->info('Laravel Reverb process started...');
 
+        $queueProcess = new Process(['php', 'artisan', 'queue:work'], base_path());
+        $queueProcess->start();
+        $this->info('Queue worker process started...');
+
         while ($watchProcess->isRunning() || $serveProcess->isRunning() || $reverbProcess->isRunning()) {
             usleep(500000);
         }

@@ -1,6 +1,7 @@
 <?php
 
 use Livewire\Volt\Component;
+use Illuminate\Support\Facades\Log;
 use App\Enums\FrameSize;
 
 new class extends Component {
@@ -11,14 +12,13 @@ new class extends Component {
     public function getListeners()
     {
         return [
-            'echo-private:file.watcher,FileUpdatedEvent' => 'onRefresh',
+            'echo:file.watcher,.App\\Events\\FileUpdatedEvent' => 'onRefresh',
         ];
     }
 
     public function onRefresh($event)
     {
-        dd($event);
-        $this->src = $event['path'];
+        Log::info($event);
     }
 }; ?>
 

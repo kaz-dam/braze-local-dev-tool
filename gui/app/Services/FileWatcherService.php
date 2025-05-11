@@ -10,9 +10,7 @@ use App\Events\FileDeletedEvent;
 
 class FileWatcherService
 {
-    public function __construct(
-        protected Watch $watcher
-    ) {}
+    public function __construct() {}
 
     /**
      * Start watching a directory for file changes.
@@ -22,7 +20,7 @@ class FileWatcherService
      */
     public function startWatching($directory, OutputStyle $output)
     {
-        $this->watcher::path($directory)
+        Watch::path($directory)
             ->onFileCreated($this->onFileCreation($output))
             ->onFileUpdated($this->onFileUpdate($output))
             ->onFileDeleted($this->onFileDelete($output))
@@ -32,7 +30,6 @@ class FileWatcherService
     protected function onFileCreation(OutputStyle $output)
     {
         return function ($path) use ($output) {
-            $output->writeln("File created: $path");
             FileCreatedEvent::dispatch($path);
         };
     }
@@ -40,7 +37,6 @@ class FileWatcherService
     protected function onFileUpdate(OutputStyle $output)
     {
         return function ($path) use ($output) {
-            $output->writeln("File updated: $path");
             FileUpdatedEvent::dispatch($path);
         };
     }
@@ -48,7 +44,6 @@ class FileWatcherService
     protected function onFileDelete(OutputStyle $output)
     {
         return function ($path) use ($output) {
-            $output->writeln("File deleted: $path");
             FileDeletedEvent::dispatch($path);
         };
     }

@@ -6,20 +6,22 @@ use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class FileCreatedEvent
+class FileCreatedEvent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    public string $path;
 
     /**
      * Create a new event instance.
      */
     public function __construct($path)
     {
-        //
+        $this->path = $path;
     }
 
     /**
@@ -30,7 +32,7 @@ class FileCreatedEvent
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('file.watcher'),
+            new Channel('file.watcher'),
         ];
     }
 }
