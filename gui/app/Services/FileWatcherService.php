@@ -4,9 +4,11 @@ namespace App\Services;
 
 use Illuminate\Console\OutputStyle;
 use Spatie\Watcher\Watch;
+use Illuminate\Support\Facades\Cache;
 use App\Events\FileCreatedEvent;
 use App\Events\FileUpdatedEvent;
 use App\Events\FileDeletedEvent;
+use App\Support\Cache\CacheKeys;
 
 class FileWatcherService
 {
@@ -20,6 +22,8 @@ class FileWatcherService
      */
     public function startWatching($directory, OutputStyle $output)
     {
+        Cache::forever(CacheKeys::FILE_SOURCE_DIRECTORY, $directory);
+
         Watch::path($directory)
             ->onFileCreated($this->onFileCreation($output))
             ->onFileUpdated($this->onFileUpdate($output))
