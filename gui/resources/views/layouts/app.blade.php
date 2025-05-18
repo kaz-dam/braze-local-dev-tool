@@ -21,6 +21,7 @@
         <aside class="hidden lg:block w-64 bg-white border-r shadow-sm p-4">
             {{-- @include('partials.sidebar') --}}
             some sidebar content
+            @livewire('components.dev-file-list')
         </aside>
 
         <!-- Drawer for mobile -->

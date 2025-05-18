@@ -7,7 +7,15 @@ use App\Enums\FrameSize;
 new class extends Component {
     public $src = '';
 
+    public $fileName = '';
+
     public $scale = 1;
+
+    public function mount(string $fileName)
+    {
+        $this->fileName = $fileName;
+        $this->src = route('preview.render', ['fileName' => $fileName]);
+    }
 
     public function getListeners()
     {
