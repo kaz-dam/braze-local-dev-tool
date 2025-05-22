@@ -22,7 +22,7 @@ class LiquidServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Log::info(Template::getTags());
+        // Log::info(Template::getTags());
         // CustomTemplate::unregisterTags([
         //     TagInclude::class,
         // ]);

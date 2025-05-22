@@ -4,7 +4,7 @@ use Livewire\Volt\Component;
 use App\Services\FileHandlingService;
 
 new class extends Component {
-    public $devFiles = [];
+    public $devFiles;
 
     public function mount()
     {
@@ -14,6 +14,6 @@ new class extends Component {
 
 <div class="flex flex-col">
     @foreach ($devFiles as $file)
-        <a href="{{ url('/?file=' . urlencode($file['name'])) }}">{{ $file['name'] }}</a>
+        <a href="{{ url('/?file=' . urlencode($file->name)) }}">{{ $file->name }}</a>
     @endforeach
 </div>

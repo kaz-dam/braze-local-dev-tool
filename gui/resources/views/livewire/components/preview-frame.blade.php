@@ -14,7 +14,14 @@ new class extends Component {
     public function mount(string $fileName)
     {
         $this->fileName = $fileName;
-        $this->src = route('preview.render', ['fileName' => $fileName]);
+        $t = now()->timestamp;
+        $this->src = $this->generateSrc();
+    }
+
+    public function generateSrc()
+    {
+        $t = now()->timestamp;
+        return route('preview.render', ['fileName' => $this->fileName]) . '?t=' . $t;
     }
 
     public function getListeners()
@@ -26,7 +33,7 @@ new class extends Component {
 
     public function onRefresh($event)
     {
-        Log::info($event);
+        $this->src = $this->generateSrc();
     }
 }; ?>
 

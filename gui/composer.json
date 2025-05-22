@@ -13,6 +13,7 @@
         "liquid/liquid": "^1.4",
         "livewire/livewire": "^3.4",
         "livewire/volt": "^1.7.0",
+        "spatie/data-transfer-object": "^3.9",
         "spatie/file-system-watcher": "^1.2",
         "wireui/wireui": "^2.4"
     },

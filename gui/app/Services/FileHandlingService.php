@@ -4,8 +4,10 @@ namespace App\Services;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Cache;
-use App\Support\Cache\CacheKeys;
+use Illuminate\Support\Collection;
 use Liquid\Template;
+use App\Support\Cache\CacheKeys;
+use App\DTOs\DevFileData;
 
 class FileHandlingService
 {
@@ -13,7 +15,6 @@ class FileHandlingService
 
     public function __construct() {}
 
-    // get file content
     public function getCompiledFileContent(string $fileName)
     {
         $fileList = $this->getDevFileList();
@@ -28,12 +29,11 @@ class FileHandlingService
 
         $template = new Template();
 
-        // Compile file content
         $template->parse($rawFileContent);
         return $template->render();
     }
 
-    public function getDevFileList(): array
+    public function getDevFileList(): Collection
     {
         $devFileListPath = Cache::get(CacheKeys::FILE_SOURCE_DIRECTORY) . '/' . $this->devFileListDirectory;
 
@@ -45,32 +45,28 @@ class FileHandlingService
             new \RecursiveDirectoryIterator($devFileListPath, \FilesystemIterator::SKIP_DOTS)
         );
 
-        $fileList = [];
+        $devFileCollection = collect();
 
         foreach ($iterator as $file) {
             if ($file->isFile()) {
                 $fileName = explode('.', $file->getFileName())[0];
 
-                $fileList[] = [
+                $devFileCollection->push(new DevFileData([
                     'name' => $fileName,
                     'path' => $file->getPathname()
-                ];
+                ]));
             }
         }
 
-        Cache::put(CacheKeys::DEV_FILE_LIST, $fileList, 60 * 60 * 24);
+        Cache::put(CacheKeys::DEV_FILE_LIST, $devFileCollection, 60 * 60 * 24);
 
-        return $fileList;
+        return $devFileCollection;
     }
 
-    public function getFilePath(array $fileList, string $fileName): string
+    public function getFilePath(Collection $fileList, string $fileName): string
     {
-        foreach ($fileList as $file) {
-            if ($file['name'] === $fileName) {
-                return $file['path'];
-            }
-        }
+        $file = $fileList->whereStrict('name', $fileName);
 
-        return '';
+        return $file->isNotEmpty() ? $file->first()->path : '';
     }
 }
