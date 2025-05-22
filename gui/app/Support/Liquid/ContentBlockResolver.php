@@ -7,8 +7,6 @@ use Illuminate\Support\Facades\Cache;
 
 class ContentBlockResolver
 {
-    private static string $contentBlockDirName = 'content_blocks';
-
     public static function apply(string $content): string
     {
         return preg_replace_callback(
@@ -24,8 +22,10 @@ class ContentBlockResolver
 
     public static function findContentBlockFile(string $fileName)
     {
+        $contentBlockDirName = config('liquid.paths.content_block_directory');
+
         $workingRootDirectory = Cache::get(CacheKeys::FILE_SOURCE_DIRECTORY);
-        $contentBlockDirFullPath = "{$workingRootDirectory}/{self::$contentBlockDirName}";
+        $contentBlockDirFullPath = "{$workingRootDirectory}/{$contentBlockDirName}";
 
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($contentBlockDirFullPath, \FilesystemIterator::SKIP_DOTS)
