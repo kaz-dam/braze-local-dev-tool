@@ -6,9 +6,9 @@ use App\Services\FileHandlingService;
 new class extends Component {
     public $devFiles;
 
-    public function mount()
+    public function mount(FileHandlingService $fileHandlingService)
     {
-        $this->devFiles = (new FileHandlingService)->getDevFileList();
+        $this->devFiles = $fileHandlingService->getDevFileList();
     }
 }; ?>
 

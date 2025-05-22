@@ -4,6 +4,7 @@ namespace App\Support\Liquid;
 
 use App\Support\Cache\CacheKeys;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class ContentBlockResolver
 {
@@ -20,7 +21,7 @@ class ContentBlockResolver
         );
     }
 
-    public static function findContentBlockFile(string $fileName)
+    public static function findContentBlockFile(string $fileName): string
     {
         $contentBlockDirName = config('liquid.paths.content_block_directory');
 
@@ -32,9 +33,13 @@ class ContentBlockResolver
         );
 
         foreach ($iterator as $file) {
-            if ($file->isFile() && $file->getFileName() === $fileName) {
+            $withoutExtension = pathinfo($file->getFileName(), PATHINFO_FILENAME);
+
+            if ($file->isFile() && $withoutExtension === $fileName) {
                 return $file->getPathname();
             }
         }
+
+        return '';
     }
 }

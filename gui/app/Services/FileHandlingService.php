@@ -18,7 +18,7 @@ class FileHandlingService
      */
     private string $devFileListDirectory;
 
-    public function __construct() {
+    public function __construct(protected LiquidService $liquidService) {
         $this->devFileListDirectory = config('liquid.paths.dev_directory');
     }
 
@@ -40,10 +40,7 @@ class FileHandlingService
 
         $rawFileContent = file_get_contents($filePath);
 
-        $template = new Template();
-
-        $template->parse($rawFileContent);
-        return $template->render();
+        return $this->liquidService->renderTemplate($rawFileContent);
     }
 
     /**
