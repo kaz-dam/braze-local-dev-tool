@@ -4,6 +4,7 @@ namespace App\Services;
 
 use Liquid\Template;
 use App\Support\Liquid\ContentBlockResolver;
+use App\Support\Liquid\CustomAttributeResolver;
 
 class LiquidService
 {
@@ -20,9 +21,11 @@ class LiquidService
         $firstLevelBlocksResolved = ContentBlockResolver::apply($templateContent);
         $secondLevelBlocksResolved = ContentBlockResolver::apply($firstLevelBlocksResolved);
 
+        $customAttributesResolved = CustomAttributeResolver::apply($secondLevelBlocksResolved);
+
         $template = new Template();
 
-        $template->parse($secondLevelBlocksResolved);
+        $template->parse($customAttributesResolved);
         return $template->render();
     }
 

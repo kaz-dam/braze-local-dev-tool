@@ -86,7 +86,7 @@ class FileHandlingService
     public function parseDirectory(string $directory): Collection
     {
         $iterator = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($devFileListPath, \FilesystemIterator::SKIP_DOTS)
+            new \RecursiveDirectoryIterator($directory, \FilesystemIterator::SKIP_DOTS)
         );
 
         $devFileCollection = collect();
